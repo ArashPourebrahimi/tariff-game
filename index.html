@@ -1,75 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tariff Game</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tariff Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 20px;
+    }
+
+    #app {
+      max-width: 950px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    button {
+      margin: 10px;
+      padding: 12px 22px;
+      font-size: 16px;
+      cursor: pointer;
+      border: 1px solid #444;
+      background: #fff;
+      border-radius: 6px;
+    }
+
+    button:hover {
+      background: #f0f0f0;
+    }
+
+    .scoreboard {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      font-weight: bold;
+    }
+
+    #result {
+      margin: 20px 0;
+      font-weight: bold;
+      min-height: 24px;
+    }
+
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    th, td {
+      border: 1px solid #333;
+      padding: 8px 12px;
+    }
+
+    th {
+      background: #efefef;
+    }
+
+    #end-controls {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
-
-<div id="app">
-
+  <div id="app">
     <div id="welcome-screen">
-        <h1>Tariff Game</h1>
-        <p>You are a country choosing trade policy over 10 rounds.</p>
+      <h1>Tariff Game</h1>
+      <p>You are a country choosing trade policy over 10 rounds.</p>
 
-        <h3>Payoff Matrix</h3>
-        <table>
-            <tr><th></th><th>Partner Low</th><th>Partner High</th></tr>
-            <tr><td>Your Low</td><td>8, 8</td><td>0, 10</td></tr>
-            <tr><td>Your High</td><td>10, 0</td><td>4, 4</td></tr>
-        </table>
+      <h3>Payoff Matrix</h3>
+      <table>
+        <tr>
+          <th></th>
+          <th>Partner Low</th>
+          <th>Partner High</th>
+        </tr>
+        <tr>
+          <td>Your Low</td>
+          <td>8, 8</td>
+          <td>0, 10</td>
+        </tr>
+        <tr>
+          <td>Your High</td>
+          <td>10, 0</td>
+          <td>4, 4</td>
+        </tr>
+      </table>
 
-        <button onclick="goToPartnerSelection()">Start Game</button>
+      <button id="start-btn">Start Game</button>
     </div>
 
     <div id="partner-screen" class="hidden">
-        <h2>Select Trading Partner</h2>
-        <button onclick="selectPartner('stochastic')">Stochastic</button>
-        <button onclick="selectPartner('cooperative')">Cooperative</button>
-        <button onclick="selectPartner('winner')">Dr. Winner</button>
+      <h2>Select Trading Partner</h2>
+      <button data-partner="stochastic">Stochastic</button>
+      <button data-partner="cooperative">Cooperative</button>
+      <button data-partner="winner">Dr. Winner</button>
     </div>
 
     <div id="game-screen" class="hidden">
-        <h2 id="partner-name"></h2>
-        <p id="round-info"></p>
+      <h2 id="partner-name"></h2>
+      <p id="round-info"></p>
 
-        <div class="scoreboard">
-            <p><strong>Your Total Score:</strong> <span id="student-score">0</span></p>
-            <p><strong>Partner Total Score:</strong> <span id="partner-score">0</span></p>
-        </div>
+      <div class="scoreboard">
+        <div>Your Total Score: <span id="student-score">0</span></div>
+        <div>Partner Total Score: <span id="partner-score">0</span></div>
+      </div>
 
-        <div id="action-buttons">
-            <button onclick="playRound('Low')">Low Tariff</button>
-            <button onclick="playRound('High')">High Tariff</button>
-        </div>
+      <div id="action-buttons">
+        <button id="low-btn">Low Tariff</button>
+        <button id="high-btn">High Tariff</button>
+      </div>
 
-        <div id="result"></div>
+      <div id="result"></div>
 
-        <div id="end-controls" class="hidden">
-            <p><strong>All 10 rounds completed.</strong></p>
-            <p><strong>Your Final Total Score:</strong> <span id="final-student-score"></span></p>
-            <p><strong>Partner Final Total Score:</strong> <span id="final-partner-score"></span></p>
-            <button onclick="restart()">Play Again</button>
-        </div>
+      <div id="end-controls" class="hidden">
+        <p><strong>All 10 rounds completed.</strong></p>
+        <p>Your Final Total Score: <span id="final-student-score"></span></p>
+        <p>Partner Final Total Score: <span id="final-partner-score"></span></p>
+        <button id="play-again-btn">Play Again</button>
+      </div>
 
-        <h3>History</h3>
-        <table id="history-table">
-            <tr>
-                <th>Round</th>
-                <th>You</th>
-                <th>Partner</th>
-                <th>Your Payoff</th>
-                <th>Partner Payoff</th>
-                <th>Your Total</th>
-                <th>Partner Total</th>
-            </tr>
-        </table>
+      <h3>History</h3>
+      <table id="history-table">
+        <tr>
+          <th>Round</th>
+          <th>You</th>
+          <th>Partner</th>
+          <th>Your Payoff</th>
+          <th>Partner Payoff</th>
+          <th>Your Total</th>
+          <th>Partner Total</th>
+        </tr>
+      </table>
     </div>
+  </div>
 
-</div>
+  <script>
+    let partner = null;
+    let round = 1;
+    let studentScore = 0;
+    let partnerScore = 0;
+    let studentHistory = [];
+    let partnerHistory = [];
 
-<script src="script.js"></script>
+    const welcomeScreen = document.getElementById("welcome-screen");
+    const partnerScreen = document.getElementById("partner-screen");
+    const gameScreen = document.getElementById("game-screen");
+
+    const partnerNameEl = document.getElementById("partner-name");
+    const roundInfoEl = document.getElementById("round-info");
+    const studentScoreEl = document.getElementById("student-score");
+    const partnerScoreEl = document.getElementById("partner-score");
+    const resultEl = document.getElementById("result");
+    const historyTable = document.getElementById("history-table");
+
+    const actionButtons = document.getElementById("action-buttons");
+    const endControls = document.getElementById("end-controls");
+    const finalStudentScoreEl = document.getElementById("final-student-score");
+    const finalPartnerScoreEl = document.getElementById("final-partner-score");
+
+    document.getElementById("start-btn").addEventListener("click", () => {
+      welcomeScreen.classList.add("hidden");
+      partnerScreen.classList.remove("hidden");
+    });
+
+    document.querySelectorAll("[data-partner]").forEach(button => {
+      button.addEventListener("click", () => {
+        selectPartner(button.dataset.partner);
+      });
+    });
+
+    document.getElementById("low-btn").addEventListener("click", () => playRound("Low"));
+    document.getElementById("high-btn").addEventListener("click", () => playRound("High"));
+    document.getElementById("play-again-btn").addEventListener("click", restart);
+
+    function selectPartner(p) {
+      partner = p;
+      partnerScreen.classList.add("hidden");
+      gameScreen.classList.remove("hidden");
+
+      let name = "";
+      if (p === "stochastic") name = "Stochastic";
+      if (p === "cooperative") name = "Cooperative";
+      if (p === "winner") name = "Dr. Winner";
+
+      partnerNameEl.textContent = "Partner: " + name;
+      updateRoundInfo();
+    }
+
+    function updateRoundInfo() {
+      if (round <= 10) {
+        roundInfoEl.textContent = "Round " + round + " of 10";
+      } else {
+        roundInfoEl.textContent = "All 10 rounds completed";
+      }
+    }
+
+    function getPartnerMove() {
+      if (partner === "stochastic") {
+        return Math.random() < 0.5 ? "Low" : "High";
+      }
+
+      if (partner === "cooperative") {
+        if (round === 1) return "Low";
+        return studentHistory[studentHistory.length - 1];
+      }
+
+      if (partner === "winner") {
+        return "High";
+      }
+
+      return "Low";
+    }
+
+    function getPayoffs(studentMove, partnerMove) {
+      if (studentMove === "Low" && partnerMove === "Low") {
+        return { student: 8, partner: 8 };
+      }
+      if (studentMove === "Low" && partnerMove === "High") {
+        return { student: 0, partner: 10 };
+      }
+      if (studentMove === "High" && partnerMove === "Low") {
+        return { student: 10, partner: 0 };
+      }
+      if (studentMove === "High" && partnerMove === "High") {
+        return { student: 4, partner: 4 };
+      }
+      return { student: 0, partner: 0 };
+    }
+
+    function playRound(studentMove) {
+      if (round > 10) return;
+
+      const partnerMove = getPartnerMove();
+      const payoffs = getPayoffs(studentMove, partnerMove);
+
+      studentScore += payoffs.student;
+      partnerScore += payoffs.partner;
+
+      studentHistory.push(studentMove);
+      partnerHistory.push(partnerMove);
+
+      studentScoreEl.textContent = studentScore;
+      partnerScoreEl.textContent = partnerScore;
+
+      resultEl.textContent =
+        "You chose: " + studentMove +
+        " | Partner chose: " + partnerMove +
+        " | Your payoff: " + payoffs.student +
+        " | Partner payoff: " + payoffs.partner;
+
+      const row = historyTable.insertRow();
+      row.insertCell(0).textContent = round;
+      row.insertCell(1).textContent = studentMove;
+      row.insertCell(2).textContent = partnerMove;
+      row.insertCell(3).textContent = payoffs.student;
+      row.insertCell(4).textContent = payoffs.partner;
+      row.insertCell(5).textContent = studentScore;
+      row.insertCell(6).textContent = partnerScore;
+
+      round++;
+
+      if (round > 10) {
+        finishGame();
+      } else {
+        updateRoundInfo();
+      }
+    }
+
+    function finishGame() {
+      actionButtons.classList.add("hidden");
+      endControls.classList.remove("hidden");
+      finalStudentScoreEl.textContent = studentScore;
+      finalPartnerScoreEl.textContent = partnerScore;
+      updateRoundInfo();
+    }
+
+    function restart() {
+      location.reload();
+    }
+  </script>
 </body>
 </html>
