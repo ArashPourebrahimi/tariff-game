@@ -1,6 +1,7 @@
 let partner = null;
 let round = 1;
-let score = 0;
+let studentScore = 0;
+let partnerScore = 0;
 let studentHistory = [];
 let partnerHistory = [];
 
@@ -47,38 +48,51 @@ function getPartnerMove() {
     }
 }
 
-function getPayoff(studentMove, partnerMove) {
-    if (studentMove === "Low" && partnerMove === "Low") return 8;
-    if (studentMove === "Low" && partnerMove === "High") return 0;
-    if (studentMove === "High" && partnerMove === "Low") return 10;
-    if (studentMove === "High" && partnerMove === "High") return 4;
+function getPayoffs(studentMove, partnerMove) {
+    if (studentMove === "Low" && partnerMove === "Low") {
+        return { student: 8, partner: 8 };
+    }
+    if (studentMove === "Low" && partnerMove === "High") {
+        return { student: 0, partner: 10 };
+    }
+    if (studentMove === "High" && partnerMove === "Low") {
+        return { student: 10, partner: 0 };
+    }
+    if (studentMove === "High" && partnerMove === "High") {
+        return { student: 4, partner: 4 };
+    }
 }
 
 function playRound(studentMove) {
     if (round > 10) return;
 
     const partnerMove = getPartnerMove();
-    const payoff = getPayoff(studentMove, partnerMove);
+    const payoffs = getPayoffs(studentMove, partnerMove);
 
-    score += payoff;
+    studentScore += payoffs.student;
+    partnerScore += payoffs.partner;
 
     studentHistory.push(studentMove);
     partnerHistory.push(partnerMove);
 
-    document.getElementById("score").innerText = score;
+    document.getElementById("student-score").innerText = studentScore;
+    document.getElementById("partner-score").innerText = partnerScore;
 
     document.getElementById("result").innerHTML =
         "You chose: " + studentMove +
         " | Partner chose: " + partnerMove +
-        " | Payoff: " + payoff;
+        " | Your payoff: " + payoffs.student +
+        " | Partner payoff: " + payoffs.partner;
 
     const table = document.getElementById("history-table");
     const row = table.insertRow();
     row.insertCell(0).innerText = round;
     row.insertCell(1).innerText = studentMove;
     row.insertCell(2).innerText = partnerMove;
-    row.insertCell(3).innerText = payoff;
-    row.insertCell(4).innerText = score;
+    row.insertCell(3).innerText = payoffs.student;
+    row.insertCell(4).innerText = payoffs.partner;
+    row.insertCell(5).innerText = studentScore;
+    row.insertCell(6).innerText = partnerScore;
 
     round++;
 
@@ -92,7 +106,8 @@ function playRound(studentMove) {
 function finishGame() {
     document.getElementById("action-buttons").classList.add("hidden");
     document.getElementById("end-controls").classList.remove("hidden");
-    document.getElementById("final-score-inline").innerText = score;
+    document.getElementById("final-student-score").innerText = studentScore;
+    document.getElementById("final-partner-score").innerText = partnerScore;
     updateRoundInfo();
 }
 
