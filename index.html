@@ -64,24 +64,18 @@
       min-height: 24px;
     }
 
-    .table-container {
-      overflow-x: auto;
-      width: 100%;
-      margin: 15px 0;
-    }
-
     table {
-      margin: 0 auto;
-      border-collapse: collapse;
       width: 100%;
-      min-width: 700px;
+      border-collapse: collapse;
+      margin-top: 15px;
+      table-layout: fixed;
     }
 
     th, td {
       border: 1px solid #333;
-      padding: 8px 10px;
-      font-size: 14px;
-      white-space: nowrap;
+      padding: 6px;
+      font-size: 13px;
+      word-wrap: break-word;
     }
 
     th {
@@ -94,6 +88,14 @@
       background: #fafafa;
       border: 1px solid #ddd;
       border-radius: 8px;
+    }
+
+    /* Hide extra columns on phones */
+    @media (max-width: 600px) {
+      .col-partner-payoff,
+      .col-partner-total {
+        display: none;
+      }
     }
 
     @media (min-width: 700px) {
@@ -114,6 +116,11 @@
         justify-content: center;
         gap: 30px;
       }
+
+      th, td {
+        font-size: 14px;
+        padding: 8px 10px;
+      }
     }
   </style>
 </head>
@@ -125,25 +132,23 @@
       <p>In each round, choose a low tariff or a high tariff.</p>
 
       <h3>Payoff Matrix</h3>
-      <div class="table-container">
-        <table>
-          <tr>
-            <th></th>
-            <th>Partner Low</th>
-            <th>Partner High</th>
-          </tr>
-          <tr>
-            <td>Your Low</td>
-            <td>8, 8</td>
-            <td>0, 10</td>
-          </tr>
-          <tr>
-            <td>Your High</td>
-            <td>10, 0</td>
-            <td>4, 4</td>
-          </tr>
-        </table>
-      </div>
+      <table>
+        <tr>
+          <th></th>
+          <th>Partner Low</th>
+          <th>Partner High</th>
+        </tr>
+        <tr>
+          <td>Your Low</td>
+          <td>8, 8</td>
+          <td>0, 10</td>
+        </tr>
+        <tr>
+          <td>Your High</td>
+          <td>10, 0</td>
+          <td>4, 4</td>
+        </tr>
+      </table>
 
       <button id="start-btn">Start Game</button>
     </div>
@@ -179,19 +184,17 @@
       </div>
 
       <h3>History</h3>
-      <div class="table-container">
-        <table id="history-table">
-          <tr>
-            <th>Round</th>
-            <th>You</th>
-            <th>Partner</th>
-            <th>Your Payoff</th>
-            <th>Partner Payoff</th>
-            <th>Your Total</th>
-            <th>Partner Total</th>
-          </tr>
-        </table>
-      </div>
+      <table id="history-table">
+        <tr>
+          <th>Round</th>
+          <th>You</th>
+          <th>Partner</th>
+          <th>Your Payoff</th>
+          <th class="col-partner-payoff">Partner Payoff</th>
+          <th>Your Total</th>
+          <th class="col-partner-total">Partner Total</th>
+        </tr>
+      </table>
     </div>
   </div>
 
@@ -311,13 +314,21 @@
         " | Partner payoff: " + payoffs.partner;
 
       const row = historyTable.insertRow();
+
       row.insertCell(0).textContent = round;
       row.insertCell(1).textContent = studentMove;
       row.insertCell(2).textContent = partnerMove;
       row.insertCell(3).textContent = payoffs.student;
-      row.insertCell(4).textContent = payoffs.partner;
+
+      const partnerPayoffCell = row.insertCell(4);
+      partnerPayoffCell.textContent = payoffs.partner;
+      partnerPayoffCell.classList.add("col-partner-payoff");
+
       row.insertCell(5).textContent = studentScore;
-      row.insertCell(6).textContent = partnerScore;
+
+      const partnerTotalCell = row.insertCell(6);
+      partnerTotalCell.textContent = partnerScore;
+      partnerTotalCell.classList.add("col-partner-total");
 
       round++;
 
