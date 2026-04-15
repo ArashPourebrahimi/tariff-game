@@ -14,12 +14,21 @@ function selectPartner(p) {
     document.getElementById("partner-screen").classList.add("hidden");
     document.getElementById("game-screen").classList.remove("hidden");
 
-    document.getElementById("partner-name").innerText = "Partner: " + p;
+    let displayName = "";
+    if (p === "stochastic") displayName = "Stochastic";
+    if (p === "cooperative") displayName = "Cooperative";
+    if (p === "winner") displayName = "Dr. Winner";
+
+    document.getElementById("partner-name").innerText = "Partner: " + displayName;
     updateRoundInfo();
 }
 
 function updateRoundInfo() {
-    document.getElementById("round-info").innerText = "Round " + round + " of 10";
+    if (round <= 10) {
+        document.getElementById("round-info").innerText = "Round " + round + " of 10";
+    } else {
+        document.getElementById("round-info").innerText = "All 10 rounds completed";
+    }
 }
 
 function getPartnerMove() {
@@ -37,11 +46,11 @@ function getPartnerMove() {
     }
 }
 
-function getPayoff(student, partnerMove) {
-    if (student === "Low" && partnerMove === "Low") return 8;
-    if (student === "Low" && partnerMove === "High") return 0;
-    if (student === "High" && partnerMove === "Low") return 10;
-    if (student === "High" && partnerMove === "High") return 4;
+function getPayoff(studentMove, partnerMove) {
+    if (studentMove === "Low" && partnerMove === "Low") return 8;
+    if (studentMove === "Low" && partnerMove === "High") return 0;
+    if (studentMove === "High" && partnerMove === "Low") return 10;
+    if (studentMove === "High" && partnerMove === "High") return 4;
 }
 
 function playRound(studentMove) {
@@ -58,8 +67,7 @@ function playRound(studentMove) {
     document.getElementById("score").innerText = score;
 
     document.getElementById("result").innerHTML =
-        "You: " + studentMove + " | Partner: " + partnerMove +
-        " | Payoff: " + payoff;
+        "You: " + studentMove + " | Partner: " + partnerMove + " | Your payoff: " + payoff;
 
     let table = document.getElementById("history-table");
     let row = table.insertRow();
@@ -72,13 +80,15 @@ function playRound(studentMove) {
     round++;
 
     if (round > 10) {
-        endGame();
+        document.getElementById("action-buttons").classList.add("hidden");
+        document.getElementById("final-review").classList.remove("hidden");
+        updateRoundInfo();
     } else {
         updateRoundInfo();
     }
 }
 
-function endGame() {
+function showFinalScreen() {
     document.getElementById("game-screen").classList.add("hidden");
     document.getElementById("final-screen").classList.remove("hidden");
     document.getElementById("final-score").innerText = score;
