@@ -11,15 +11,16 @@ function goToPartnerSelection() {
 
 function selectPartner(p) {
     partner = p;
+
     document.getElementById("partner-screen").classList.add("hidden");
     document.getElementById("game-screen").classList.remove("hidden");
 
-    let displayName = "";
-    if (p === "stochastic") displayName = "Stochastic";
-    if (p === "cooperative") displayName = "Cooperative";
-    if (p === "winner") displayName = "Dr. Winner";
+    let name = "";
+    if (p === "stochastic") name = "Stochastic";
+    if (p === "cooperative") name = "Cooperative";
+    if (p === "winner") name = "Dr. Winner";
 
-    document.getElementById("partner-name").innerText = "Partner: " + displayName;
+    document.getElementById("partner-name").innerText = "Partner: " + name;
     updateRoundInfo();
 }
 
@@ -56,8 +57,8 @@ function getPayoff(studentMove, partnerMove) {
 function playRound(studentMove) {
     if (round > 10) return;
 
-    let partnerMove = getPartnerMove();
-    let payoff = getPayoff(studentMove, partnerMove);
+    const partnerMove = getPartnerMove();
+    const payoff = getPayoff(studentMove, partnerMove);
 
     score += payoff;
 
@@ -67,10 +68,12 @@ function playRound(studentMove) {
     document.getElementById("score").innerText = score;
 
     document.getElementById("result").innerHTML =
-        "You: " + studentMove + " | Partner: " + partnerMove + " | Your payoff: " + payoff;
+        "You chose: " + studentMove +
+        " | Partner chose: " + partnerMove +
+        " | Payoff: " + payoff;
 
-    let table = document.getElementById("history-table");
-    let row = table.insertRow();
+    const table = document.getElementById("history-table");
+    const row = table.insertRow();
     row.insertCell(0).innerText = round;
     row.insertCell(1).innerText = studentMove;
     row.insertCell(2).innerText = partnerMove;
@@ -80,18 +83,17 @@ function playRound(studentMove) {
     round++;
 
     if (round > 10) {
-        document.getElementById("action-buttons").classList.add("hidden");
-        document.getElementById("final-review").classList.remove("hidden");
-        updateRoundInfo();
+        finishGame();
     } else {
         updateRoundInfo();
     }
 }
 
-function showFinalScreen() {
-    document.getElementById("game-screen").classList.add("hidden");
-    document.getElementById("final-screen").classList.remove("hidden");
-    document.getElementById("final-score").innerText = score;
+function finishGame() {
+    document.getElementById("action-buttons").classList.add("hidden");
+    document.getElementById("end-controls").classList.remove("hidden");
+    document.getElementById("final-score-inline").innerText = score;
+    updateRoundInfo();
 }
 
 function restart() {

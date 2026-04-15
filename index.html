@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tariff Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -9,10 +10,10 @@
 
 <div id="app">
 
+    <!-- Welcome -->
     <div id="welcome-screen">
         <h1>Tariff Game</h1>
         <p>You are a country choosing trade policy over 10 rounds.</p>
-        <p>Choose Low or High tariffs each round.</p>
 
         <h3>Payoff Matrix</h3>
         <table>
@@ -24,18 +25,19 @@
         <button onclick="goToPartnerSelection()">Start Game</button>
     </div>
 
+    <!-- Partner Selection -->
     <div id="partner-screen" class="hidden">
         <h2>Select Trading Partner</h2>
-
         <button onclick="selectPartner('stochastic')">Stochastic</button>
         <button onclick="selectPartner('cooperative')">Cooperative</button>
         <button onclick="selectPartner('winner')">Dr. Winner</button>
     </div>
 
+    <!-- Game -->
     <div id="game-screen" class="hidden">
         <h2 id="partner-name"></h2>
         <p id="round-info"></p>
-        <p>Total Score: <span id="score">0</span></p>
+        <p>Your Total Score: <span id="score">0</span></p>
 
         <div id="action-buttons">
             <button onclick="playRound('Low')">Low Tariff</button>
@@ -44,9 +46,11 @@
 
         <div id="result"></div>
 
-        <div id="final-review" class="hidden">
-            <p><strong>You have completed all 10 rounds.</strong></p>
-            <button onclick="showFinalScreen()">View Final Score</button>
+        <!-- End Controls (same page) -->
+        <div id="end-controls" class="hidden">
+            <p><strong>All 10 rounds completed.</strong></p>
+            <p>Your Final Total Score: <span id="final-score-inline"></span></p>
+            <button onclick="restart()">Play Again</button>
         </div>
 
         <h3>History</h3>
@@ -59,12 +63,6 @@
                 <th>Total</th>
             </tr>
         </table>
-    </div>
-
-    <div id="final-screen" class="hidden">
-        <h2>Game Over</h2>
-        <p>Your Final Score: <span id="final-score"></span></p>
-        <button onclick="restart()">Play Again</button>
     </div>
 
 </div>
