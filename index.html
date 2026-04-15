@@ -128,22 +128,22 @@
     <div id="welcome-screen">
       <h1>Tariff Game</h1>
       <p>You are a country choosing trade policy over 10 rounds.</p>
-      <p>In each round, choose low tariffs or high tariffs.</p>
+      <p>In each round, choose whether to set low tariffs or high tariffs.</p>
 
       <h3>Payoff Matrix</h3>
       <table>
         <tr>
           <th></th>
-          <th>Partner Low</th>
-          <th>Partner High</th>
+          <th>Partner Sets Low Tariffs</th>
+          <th>Partner Sets High Tariffs</th>
         </tr>
         <tr>
-          <td>Your Low</td>
+          <td>You Set Low Tariffs</td>
           <td>8, 8</td>
           <td>0, 10</td>
         </tr>
         <tr>
-          <td>Your High</td>
+          <td>You Set High Tariffs</td>
           <td>10, 0</td>
           <td>4, 4</td>
         </tr>
@@ -169,8 +169,8 @@
       </div>
 
       <div id="action-buttons">
-        <button id="low-btn">Low Tariffs</button>
-        <button id="high-btn">High Tariffs</button>
+        <button id="low-btn">Set Low Tariffs</button>
+        <button id="high-btn">Set High Tariffs</button>
       </div>
 
       <div id="result"></div>
@@ -291,6 +291,10 @@
       return { student: 0, partner: 0 };
     }
 
+    function formatChoice(choice) {
+      return choice === "Low" ? "Set Low Tariffs" : "Set High Tariffs";
+    }
+
     function playRound(studentMove) {
       if (round > 10) return;
 
@@ -307,9 +311,9 @@
       partnerScoreEl.textContent = partnerScore;
 
       resultEl.textContent =
-        "You chose: " + studentMove +
-        " tariffs | Partner chose: " + partnerMove +
-        " tariffs | Your payoff: " + payoffs.student +
+        "You chose: " + formatChoice(studentMove) +
+        " | Partner chose: " + formatChoice(partnerMove) +
+        " | Your payoff: " + payoffs.student +
         " | Partner payoff: " + payoffs.partner;
 
       const row = historyTable.insertRow();
