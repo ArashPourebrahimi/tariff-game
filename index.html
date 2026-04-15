@@ -90,7 +90,6 @@
       border-radius: 8px;
     }
 
-    /* Hide extra columns on phones */
     @media (max-width: 600px) {
       .col-partner-payoff,
       .col-partner-total {
@@ -129,7 +128,7 @@
     <div id="welcome-screen">
       <h1>Tariff Game</h1>
       <p>You are a country choosing trade policy over 10 rounds.</p>
-      <p>In each round, choose a low tariff or a high tariff.</p>
+      <p>In each round, choose low tariffs or high tariffs.</p>
 
       <h3>Payoff Matrix</h3>
       <table>
@@ -170,8 +169,8 @@
       </div>
 
       <div id="action-buttons">
-        <button id="low-btn">Low Tariff</button>
-        <button id="high-btn">High Tariff</button>
+        <button id="low-btn">Low Tariffs</button>
+        <button id="high-btn">High Tariffs</button>
       </div>
 
       <div id="result"></div>
@@ -309,8 +308,8 @@
 
       resultEl.textContent =
         "You chose: " + studentMove +
-        " | Partner chose: " + partnerMove +
-        " | Your payoff: " + payoffs.student +
+        " tariffs | Partner chose: " + partnerMove +
+        " tariffs | Your payoff: " + payoffs.student +
         " | Partner payoff: " + payoffs.partner;
 
       const row = historyTable.insertRow();
