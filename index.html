@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tariff Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+
+    <!-- Screen 1: Welcome -->
+    <div id="welcome-screen">
+        <h1>Tariff Game</h1>
+        <p>You are a country choosing trade policy over 10 rounds.</p>
+        <p>Choose Low or High tariffs each round.</p>
+
+        <h3>Payoff Matrix</h3>
+        <table>
+            <tr><th></th><th>Partner Low</th><th>Partner High</th></tr>
+            <tr><td>Your Low</td><td>8, 8</td><td>0, 10</td></tr>
+            <tr><td>Your High</td><td>10, 0</td><td>4, 4</td></tr>
+        </table>
+
+        <button onclick="goToPartnerSelection()">Start Game</button>
+    </div>
+
+    <!-- Screen 2: Partner Selection -->
+    <div id="partner-screen" class="hidden">
+        <h2>Select Trading Partner</h2>
+
+        <button onclick="selectPartner('stochastic')">Stochastic (Unpredictable)</button>
+        <button onclick="selectPartner('cooperative')">Cooperative (Reciprocal)</button>
+        <button onclick="selectPartner('winner')">Dr. Winner (Always High)</button>
+    </div>
+
+    <!-- Screen 3: Game -->
+    <div id="game-screen" class="hidden">
+        <h2 id="partner-name"></h2>
+        <p id="round-info"></p>
+        <p>Total Score: <span id="score">0</span></p>
+
+        <button onclick="playRound('Low')">Low Tariff</button>
+        <button onclick="playRound('High')">High Tariff</button>
+
+        <div id="result"></div>
+
+        <h3>History</h3>
+        <table id="history-table">
+            <tr>
+                <th>Round</th>
+                <th>You</th>
+                <th>Partner</th>
+                <th>Payoff</th>
+                <th>Total</th>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Screen 4: Final -->
+    <div id="final-screen" class="hidden">
+        <h2>Game Over</h2>
+        <p>Your Final Score: <span id="final-score"></span></p>
+        <button onclick="restart()">Play Again</button>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
