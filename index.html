@@ -154,9 +154,9 @@
 
     <div id="partner-screen" class="hidden">
       <h2>Select Trading Partner</h2>
-      <button data-partner="stochastic">Stochastic</button>
-      <button data-partner="cooperative">Cooperative</button>
-      <button data-partner="winner">Dr. Winner</button>
+      <button data-partner="stochastic">Stochastic Republic</button>
+      <button data-partner="cooperative">Cooperative Kingdom</button>
+      <button data-partner="winner">Winning Land</button>
     </div>
 
     <div id="game-screen" class="hidden">
@@ -242,11 +242,11 @@
       gameScreen.classList.remove("hidden");
 
       let name = "";
-      if (p === "stochastic") name = "Stochastic";
-      if (p === "cooperative") name = "Cooperative";
-      if (p === "winner") name = "Dr. Winner";
+      if (p === "stochastic") name = "Stochastic Republic";
+      if (p === "cooperative") name = "Cooperative Kingdom";
+      if (p === "winner") name = "Winning Land";
 
-      partnerNameEl.textContent = "Partner: " + name;
+      partnerNameEl.textContent = "Trading Partner: " + name;
       updateRoundInfo();
     }
 
@@ -295,6 +295,10 @@
       return choice === "Low" ? "Set Low Tariffs" : "Set High Tariffs";
     }
 
+    function shortChoice(choice) {
+      return choice === "Low" ? "Low" : "High";
+    }
+
     function playRound(studentMove) {
       if (round > 10) return;
 
@@ -319,8 +323,8 @@
       const row = historyTable.insertRow();
 
       row.insertCell(0).textContent = round;
-      row.insertCell(1).textContent = studentMove;
-      row.insertCell(2).textContent = partnerMove;
+      row.insertCell(1).textContent = shortChoice(studentMove);
+      row.insertCell(2).textContent = shortChoice(partnerMove);
       row.insertCell(3).textContent = payoffs.student;
 
       const partnerPayoffCell = row.insertCell(4);
